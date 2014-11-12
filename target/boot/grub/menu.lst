@@ -1,0 +1,14 @@
+default 0
+timeout 10
+#splashimage=(cd)/boot/grub/splash.xpm.gz
+
+#title=Gentoo Linux XEN
+#        root (cd)
+#	kernel /boot/xen-4.3.3.gz
+#        module /boot/vmlinuz root=/dev/ram0 dom0_mem=512M
+
+title=Gentoo Linux
+	kernel /boot/vmlinuz
+
+#	root=/dev/ram0 init=/initrc rw cdroot
+#        initrd (cd)/boot/initrd 

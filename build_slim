@@ -1,0 +1,8 @@
+#!/bin/bash
+
+rm -rf target
+mkdir target
+cp -a source/boot target/
+
+mkisofs -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size \
+4 -boot-info-table -iso-level 4 -hide boot.catalog -o ./livecd_slim.iso target/

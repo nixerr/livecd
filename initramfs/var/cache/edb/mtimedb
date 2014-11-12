@@ -1,0 +1,69 @@
+{
+	"info": {}, 
+	"ldpath": {}, 
+	"resume": {
+		"favorites": [
+			"sys-apps/busybox"
+		], 
+		"mergelist": [
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-libs/zlib-1.2.8-r1", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-libs/timezone-data-2014d", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"virtual/libintl-0-r1", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-libs/cracklib-2.9.1-r1", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-libs/db-4.8.30-r1", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-libs/glibc-2.19-r1", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-libs/pam-1.1.8-r2", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-auth/pambase-20120417-r3", 
+				"merge"
+			], 
+			[
+				"ebuild", 
+				"/usr/src/initramfs/", 
+				"sys-apps/busybox-1.21.0", 
+				"merge"
+			]
+		], 
+		"myopts": {}
+	}, 
+	"starttime": 0, 
+	"updates": {}, 
+	"version": "2.2.8-r1"
+}

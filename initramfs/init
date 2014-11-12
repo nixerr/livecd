@@ -1,0 +1,117 @@
+#!/bin/busybox sh
+#PATH=/bin:/sbin
+
+# Get kernel CMDLINE
+/bin/mount -t proc none /proc
+/bin/mount -t devtmpfs none /dev
+/bin/mount -t sysfs none /sys
+#/bin/mount -t devpts devpts /dev/pts
+CMDLINE=`cat /proc/cmdline`
+#umount /proc
+
+#echo "i'm sleep for 5 seconds"
+sleep 2
+
+exec /bin/sh
+
+echo -ne '\nFind and dumping linux credetinails!\n\n'
+
+/dump_shadow.sh
+
+echo -ne '\n\nSleep 10 seconds and reboot!\n'
+eject /dev/sr0
+sleep 10
+reboot -f
+
+
+
+# Mount CD device
+CDROM=""
+#for x in sda sdb sdc sdd
+for x in sr0 sdb1 cdrom dvdrom
+do
+  mount /dev/${x} /cdrom > /dev/null 2>&1
+  if [ "$?" = "0" ]
+  then
+    CDROM="${x}"
+    break
+  fi
+done
+
+# CD not found
+if [ "${CDROM}" == "" ]
+then
+  exec /bin/sh
+  exit
+fi
+
+# Mount root and create read-write directories
+#mount -t squashfs -o loop,ro /cdrom/files/source.img /new > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /new/var > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /new/etc > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /new/tmp > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /new/root > /dev/null 2>&1
+#cd /new/var && tar xpf /cdrom/files/var.tar > /dev/null 2>&1
+#cd /new/etc && tar xpf /cdrom/files/etc.tar > /dev/null 2>&1
+#cd /new/root && tar xpf /cdrom/files/root.tar > /dev/null 2>&1
+
+#exec /bin/sh
+#mkdir /store
+#mkdir /cdrom
+#mkdir /fake
+
+#exec /bin/sh
+
+mount -t tmpfs -o size=2G none /store > /dev/null 2>&1
+#tar --use-compress-program=pigz -zxpf /cdrom/files/filesystem.tar.gz -C /store
+#pigz -c -d /cdrom/files/filesystem.tar.gz | tar xpf - -C /store/
+#tar xpf /cdrom/files/filesystem.tar -C /store/
+pigz -c -d /cdrom/files/root.tar.gz | tar xpf - -C /store/
+mkdir /store/usr
+mkdir /store/etc
+mkdir /store/var
+pigz -c -d /cdrom/files/usr.tar.gz | tar xpf - -C /store/usr/
+pigz -c -d /cdrom/files/etc.tar.gz | tar xpf - -C /store/etc/
+pigz -c -d /cdrom/files/var.tar.gz | tar xpf - -C /store/var/
+
+
+
+
+#umount /fake
+umount /dev/${CDROM}
+eject /dev/${CDROM}
+
+#mkdir /store/newroot
+#cp /cdrom/files/* /store/
+#umount /cdrom
+#mount -t squashfs -o loop,rw /store/source.img /store/newroot > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /store/newroot/var > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /store/newroot/etc > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /store/newroot/tmp > /dev/null 2>&1
+#mount -t tmpfs -o size=32m none /store/newroot/root > /dev/null 2>&1
+#cd /store/newroot/var && tar xpf /store/var.tar > /dev/null 2>&1
+#cd /store/newroot/etc && tar xpf /store/etc.tar > /dev/null 2>&1
+#cd /store/newroot/root && tar xpf /store/root.tar > /dev/null 2>&1
+#mkdir /store/newroot/sys
+
+
+umount /dev
+umount /proc
+#umount /cdrom
+
+#/bin/mkdir /new/dev
+/bin/mkdir /store/proc
+/bin/mkdir /store/dev
+/bin/mkdir /store/sys
+/bin/mount -t devtmpfs none /store/dev
+/bin/mount -t proc none /store/proc
+/bin/mount -t sysfs none /store/sys
+
+exec switch_root /store/ /sbin/init || exec /bin/sh
+
+# Pivot root and start real init
+#cd /new
+#pivot_root . new
+#exec chroot . /bin/sh <<- EOF >dev/console 2>&1
+#exec /sbin/init ${CMDLINE}
+#EOF 
